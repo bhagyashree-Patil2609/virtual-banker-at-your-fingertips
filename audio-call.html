@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Call - Virtual Banker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            width: 100%;
+            background-color: #0066cc;
+            padding: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #cce5ff;
+        }
+
+        /* Main Container */
+        .audio-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0066cc;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0052a3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a href="vbank.html">Home</a>
+        <span> | </span>
+        <a href="video.html">Video Call</a>
+        <span> | </span>
+        <a href="help.html">Help</a>
+    </div>
+
+    <!-- Audio Call Section -->
+    <div class="audio-container">
+        <h1>Virtual Banker - Audio Call</h1>
+        <p id="status">Ready to start an audio call</p>
+        <div class="controls">
+            <button onclick="startAudioCall()">Start Audio Call</button>
+            <button onclick="endAudioCall()">End Call</button>
+        </div>
+    </div>
+
+    <script>
+        let localStream;
+        let peerConnection;
+        const configuration = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' }
+            ]
+        };
+
+        async function startAudioCall() {
+            document.getElementById('status').textContent = "Starting audio call...";
+
+            // Access user's microphone
+            localStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            // Initialize peer connection
+            peerConnection = new RTCPeerConnection(configuration);
+            peerConnection.addStream(localStream);
+
+            // Update UI with connection status
+            peerConnection.onconnectionstatechange = () => {
+                const statusElement = document.getElementById('status');
+                switch (peerConnection.connectionState) {
+                    case "connected":
+                        statusElement.textContent = "Audio call connected";
+                        break;
+                    case "disconnected":
+                    case "failed":
+                        statusElement.textContent = "Audio call disconnected";
+                        break;
+                    case "closed":
+                        statusElement.textContent = "Audio call ended";
+                        break;
+                }
+            };
+
+            // Create and send offer (signaling server logic needed here)
+            const offer = await peerConnection.createOffer();
+            await peerConnection.setLocalDescription(offer);
+
+            // Send offer to remote peer (signaling server logic needed here)
+            // You would use WebSocket or another method to exchange the offer/answer and ICE candidates.
+        }
+
+        function endAudioCall() {
+            if (peerConnection) {
+                peerConnection.close();
+                peerConnection = null;
+            }
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+                localStream = null;
+            }
+            document.getElementById('status').textContent = "Audio call ended";
+        }
+    </script>
+</body>
+</html>
