@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Advertisement Website</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1E40AF",
+                        secondary: "#1D4ED8",
+                        accent: "#FBBF24",
+                        light: "#F3F4F6"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-padding-top: 4rem;
+        }
+/* Chatbot Box */
+        .chatbot {
+            border: 2px solid #0066cc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .chatbot h2 {
+            color: #0066cc;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-messages {
+            border: 1px solid #ddd;
+            padding: 10px;
+            height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+
+        .user-message, .bot-message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 10px;
+            width: fit-content;
+        }
+
+        .user-message {
+            background-color: #cce5ff;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background-color: #e6e6e6;
+        }
+
+        /* Broadcast Box */
+        .broadcast {
+            background-color: #e6ffe6;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+
+        /* Call Buttons */
+        .call-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background-color: #0066cc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .call-button:hover {
+            background-color: #0052a3;
+        }
+
+    </style>
+</head>
+
+<body class="bg-light text-gray-800 font-sans">
+
+    <!-- AI chatbot link -->
+
+    <script src="https://cdn.botpress.cloud/webchat/v2.2/inject.js"></script>
+    <script src="https://files.bpcontent.cloud/2024/12/01/06/20241201063820-NKK7HVFR.js"></script>
+
+    <!-- Sticky Navbar -->
+    <nav class="bg-primary text-white fixed w-full z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center px-4 py-3">
+            <a href="#" class="text-2xl font-bold">Bank Name</a>
+            <div class="lg:hidden">
+                <button id="menu-btn" class="text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+            <ul id="menu" class="hidden lg:flex space-x-4">
+                <li><a href="#offers" class="hover:text-accent">Offers</a></li>
+                <li><a href="#announcements" class="hover:text-accent">Announcements</a></li>
+                <li><a href="#testimonials" class="hover:text-accent">Testimonials</a></li>
+                <li><a href="#contact" class="hover:text-accent">Contact</a></li>
+            </ul>
+        </div>
+        <!-- Mobile Menu -->
+        <ul id="mobile-menu" class="hidden bg-primary text-white flex flex-col space-y-2 px-4 py-3 lg:hidden">
+            <li><a href="#offers" class="hover:text-accent">Offers</a></li>
+            <li><a href="#announcements" class="hover:text-accent">Announcements</a></li>
+            <li><a href="#testimonials" class="hover:text-accent">Testimonials</a></li>
+            <li><a href="#contact" class="hover:text-accent">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Carousel -->
+    <div class="relative w-full h-[400px] mt-16 overflow-hidden">
+        <div class="carousel relative">
+            <!-- Slide 1 -->
+            <div class="carousel-item opacity-100 transition-opacity duration-700 w-full h-[400px]">
+                <img src="https://media.istockphoto.com/id/1304484797/photo/person-holds-a-smartphone-with-mobile-banking-icons-projection.jpg?s=612x612&w=0&k=20&c=eYpphDeQI9uW4DnmQhAx7alQEIrQ7p6JlWfGTb80v-s=" alt="Welcome to Your Trusted Bank"
+                    class="w-full h-full object-cover">
+            </div>
+            <!-- Slide 2 -->
+            <div class="carousel-item hidden opacity-0 transition-opacity duration-700 w-full h-[400px]">
+                <img src="https://png.pngtree.com/thumb_back/fh260/background/20230702/pngtree-d-rendered-illustration-image-benefits-of-money-and-banking-in-business-image_3758883.jpg" alt="Exciting Offers Await You" class="w-full h-full object-cover">
+            </div>
+            <!-- Slide 3 -->
+            <div class="carousel-item hidden opacity-0 transition-opacity duration-700 w-full h-[400px]">
+                <img src="https://img.freepik.com/premium-photo/coins-background-chart-finance-bank-account-concept_367038-1801.jpg" alt="Secure Your Future with Us" class="w-full h-full object-cover">
+            </div>
+        </div>
+        <!-- Navigation Buttons -->
+        <button id="prev"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
+            &#10094;
+        </button>
+        <button id="next"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow hover:bg-gray-200">
+            &#10095;
+        </button>
+    </div>
+
+    <!-- Offers Section -->
+    <section id="offers" class="container mx-auto my-16 px-4">
+        <h2 class="text-2xl font-bold text-primary mb-6">Latest Offers</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <div class="p-6 bg-white rounded-lg shadow-md hover:scale-105 transition transform">
+                <h3 class="text-lg font-semibold text-secondary mb-4">Special Loan Rates</h3>
+                <p>Get a personal loan at only 7.5% interest. Limited time offer!</p>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md hover:scale-105 transition transform">
+                <h3 class="text-lg font-semibold text-secondary mb-4">Credit Card Cashback</h3>
+                <p>Earn up to 5% cashback on all purchases with our new card.</p>
+            </div>
+            <div class="p-6 bg-white rounded-lg shadow-md hover:scale-105 transition transform">
+                <h3 class="text-lg font-semibold text-secondary mb-4">Savings Account Bonus</h3>
+                <p>Open a savings account today and get a ₹1000 welcome bonus.</p>
+            </div>
+        </div>
+    </section>
+ <!-- Chatbot Section -->
+        <section class="section chatbot">
+            <h2>Chat with Our Virtual Assistant</h2>
+            <div class="chat-messages" id="chat-messages">
+                <div class="bot-message">Hello! How can I assist you today?</div>
+            </div>
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your question..." onkeydown="if (event.key === 'Enter') sendMessage()">
+        </section>
+
+
+    <!-- Announcements Section -->
+    <section id="announcements" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold text-primary mb-4">Public Announcements</h2>
+            <marquee class="bg-light text-secondary p-4 rounded-md shadow-md">
+                Diwali Offer: 50% off on credit cards! | Low interest rates on loans! | Join our premium savings
+                account!
+            </marquee>
+        </div>
+    </section>
+ <!-- Video and Audio Call Section -->
+        <section class="section">
+            <a href="video.html" class="call-button">Start a Video Call with Support Staff</a>
+            <a href="audio.html" class="call-button">Start an Audio Call with Support Staff</a>
+        </section>
+
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="bg-light py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold text-primary mb-6">What Our Customers Say</h2>
+            <div class="space-y-4">
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <p>"The bank offers amazing services! The customer support is top-notch."</p>
+                    <p class="mt-2 text-right font-semibold">- John Doe</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-md">
+                    <p>"I got my loan approved in just 24 hours. Highly recommend their loan service!"</p>
+                    <p class="mt-2 text-right font-semibold">- Jane Smith</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-primary text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
+            <form class="space-y-4">
+                <div>
+                    <label for="name" class="block font-semibold mb-2">Name</label>
+                    <input type="text" id="name" class="w-full p-2 rounded-md">
+                </div>
+                <div>
+                    <label for="email" class="block font-semibold mb-2">Email</label>
+                    <input type="email" id="email" class="w-full p-2 rounded-md">
+                </div>
+                <div>
+                    <label for="message" class="block font-semibold mb-2">Message</label>
+                    <textarea id="message" rows="4" class="w-full p-2 rounded-md"></textarea>
+                </div>
+                <button class="bg-accent text-primary px-6 py-2 rounded-md font-bold">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-6">
+        <div class="container mx-auto px-4 flex flex-col sm:flex-row justify-between">
+            <p>&copy; 2024 Bank Name. All rights reserved.</p>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-accent">Facebook</a>
+                <a href="#" class="hover:text-accent">Twitter</a>
+                <a href="#" class="hover:text-accent">Instagram</a>
+            </div>
+        </div>
+    </footer>
+<script>
+    // Basic chatbot functionality
+    function sendMessage() {
+        const chatInput = document.getElementById('chat-input');
+        const chatMessages = document.getElementById('chat-messages');
+        const userMessage = chatInput.value.trim();
+
+        // Retrieve the current step and category from sessionStorage
+        let currentStep = sessionStorage.getItem('currentStep');
+        let categorySelected = sessionStorage.getItem('categorySelected');
+
+        if (userMessage) {
+            // Append user message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.classList.add('user-message');
+            userMsgDiv.textContent = userMessage;
+            chatMessages.appendChild(userMsgDiv);
+
+            // Bot response logic
+            let botResponse = '';
+
+            if (!currentStep) {
+                // Initial step: Ask for category selection
+                botResponse = 'Hello! Please choose a category:\n1. Account Management\n2. Cards (Credit/Debit/Prepaid)\n3. Loans\n4. Savings and Investments\n5. Security and Fraud\n6. Branch and ATM Information\n7. Banking Services\n8. FAQs and General Queries';
+                sessionStorage.setItem('currentStep', 'categorySelection'); // Proceed to category selection step
+            } else if (currentStep === 'categorySelection') {
+                // Handle the category selection
+                switch (userMessage) {
+                    case '1':
+                        sessionStorage.setItem('categorySelected', 'account management');
+                        botResponse = 'You selected Account Management. Choose a service:\n1. Open a new savings or current account\n2. Update contact details (phone number, email, address)';
+                        sessionStorage.setItem('currentStep', 'accountManagement');
+                        break;
+                    case '2':
+                        sessionStorage.setItem('categorySelected', 'cards');
+                        botResponse = 'You selected Cards. Choose a service:\n1. Apply for a credit or debit card\n2. Block a lost or stolen card';
+                        sessionStorage.setItem('currentStep', 'cards');
+                        break;
+                    case '3':
+                        sessionStorage.setItem('categorySelected', 'loans');
+                        botResponse = 'You selected Loans. Choose a service:\n1. Apply for a personal, home, or car loan\n2. Check eligibility criteria for loans';
+                        sessionStorage.setItem('currentStep', 'loans');
+                        break;
+                    case '4':
+                        sessionStorage.setItem('categorySelected', 'savings');
+                        botResponse = 'You selected Savings and Investments. Choose a service:\n1. Interest rate for fixed deposits\n2. Start a recurring deposit';
+                        sessionStorage.setItem('currentStep', 'savings');
+                        break;
+                    case '5':
+                        sessionStorage.setItem('categorySelected', 'security');
+                        botResponse = 'You selected Security and Fraud. Choose a service:\n1. Report suspicious activity\n2. Reset internet/mobile banking password';
+                        sessionStorage.setItem('currentStep', 'security');
+                        break;
+                    case '6':
+                        sessionStorage.setItem('categorySelected', 'branch');
+                        botResponse = 'You selected Branch and ATM Information. Choose a service:\n1. Locate the nearest branch or ATM\n2. Book an appointment at your local branch';
+                        sessionStorage.setItem('currentStep', 'branch');
+                        break;
+                    case '7':
+                        sessionStorage.setItem('categorySelected', 'banking');
+                        botResponse = 'You selected Banking Services. Choose a service:\n1. Register for internet/mobile banking\n2. Request a new checkbook';
+                        sessionStorage.setItem('currentStep', 'banking');
+                        break;
+                    case '8':
+                        sessionStorage.setItem('categorySelected', 'faqs');
+                        botResponse = 'You selected FAQs and General Queries. Choose a service:\n1. Switch your salary account to our bank\n2. Process to open a business account';
+                        sessionStorage.setItem('currentStep', 'faqs');
+                        break;
+                    default:
+                        botResponse = 'Invalid choice. Please choose a valid option (1-8).';
+                }
+            } else if (currentStep === 'accountManagement') {
+                // Handle Account Management responses
+                switch (userMessage) {
+                    case '1':
+                        botResponse = 'To open a new account:\n1. Visit your nearest branch or the bank\'s website/app.\n2. Choose the account type (savings or current).\n3. Fill out the application form and submit the required documents (e.g., ID proof, address proof).\n4. Provide passport-size photographs and make the initial deposit (if required).\n5. Your account will be activated after document verification.';
+                        break;
+                    case '2':
+                        botResponse = 'To update your contact details:\n1. Online/App: Log in, go to profile/settings, update details, and authenticate via OTP.\n2. Branch Visit: Fill out a contact update form and provide ID proof.\n3. Customer Support: Call the helpline, verify your identity, and request an update.';
+                        break;
+                    default:
+                        botResponse = 'Invalid choice. Please choose 1 or 2.';
+                }
+            } else if (currentStep === 'cards') {
+                // Handle Cards responses
+                switch (userMessage) {
+                    case '1':
+                        botResponse = 'To apply for a credit or debit card:\n1. Visit the nearest branch or apply online via the bank’s website/app.\n2. Submit necessary documents (e.g., ID proof, address proof, income details).\n3. Wait for approval, which may take up to 7-10 business days.\n4. Your card will be delivered to your registered address.';
+                        break;
+                    case '2':
+                        botResponse = 'To block a lost or stolen card:\n1. Log in to the mobile banking app or internet banking and use the “Block Card” option.\n2. Call the customer care helpline to request card blocking.\n3. Visit a branch or use SMS/IVR if these services are available.';
+                        break;
+                    default:
+                        botResponse = 'Invalid choice. Please choose 1 or 2.';
+                }
+            } else if (currentStep === 'loans') {
+                // Handle Loans responses
+                switch (userMessage) {
+                    case '1':
+                        botResponse = 'To apply for a personal, home, or car loan:\n1. Visit the nearest branch or apply online via the bank’s website/app.\n2. Provide necessary documentation (e.g., ID proof, address proof, income details).\n3. Wait for approval, which may take up to 7-10 business days.\n4. Your loan will be disbursed after approval.';
+                        break;
+                    case '2':
+                        botResponse = 'Loan eligibility criteria:\n1. Minimum age: 21 years.\n2. Minimum income: Rs. 20,000/month.\n3. Good credit score (750+).';
+                        break;
+                    default:
+                        botResponse = 'Invalid choice. Please choose 1 or 2.';
+                }
+            }
+            // Similarly, handle other categories like savings, security, etc.
+
+            // Append bot message
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.classList.add('bot-message');
+            botMsgDiv.textContent = botResponse;
+            chatMessages.appendChild(botMsgDiv);
+
+            // Scroll to the latest message
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Clear input
+            chatInput.value = '';
+        }
+    }
+</script>
+
+    <script>
+        // Carousel functionality
+        const slides = document.querySelectorAll('.carousel-item');
+        const totalSlides = slides.length;
+        let currentIndex = 0;
+    
+        // Show a specific slide
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.add('hidden', 'opacity-0'); // Hide all slides
+                if (i === index) {
+                    slide.classList.remove('hidden', 'opacity-0'); // Show the active slide
+                    slide.classList.add('opacity-100');
+                }
+            });
+        }
+    
+        // Show the next slide
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % totalSlides;
+            showSlide(currentIndex);
+        }
+    
+        // Show the previous slide
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+            showSlide(currentIndex);
+        }
+    
+        // Add event listeners for navigation buttons
+        document.getElementById('next').addEventListener('click', nextSlide);
+        document.getElementById('prev').addEventListener('click', prevSlide);
+    
+        // Auto-change slides every 5 seconds
+        setInterval(nextSlide, 5000);
+    
+        // Initialize the carousel by showing the first slide
+        showSlide(currentIndex);
+    </script>
+    
+</body>
+
+</html>
